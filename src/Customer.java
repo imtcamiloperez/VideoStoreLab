@@ -2,16 +2,18 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 public class Customer {
-    private String _name;
+    private String _nam e;
     private Vector _rentals = new Vector();
+	private int frequentRenterPoints;
+	private double totalAmount;
 
     public Customer(String name) {
         _name = name;
     }
 
     public String statement() {
-        double totalAmount = 0;
-        int frequentRenterPoints = 0;
+        totalAmount = 0;
+        frequentRenterPoints = 0;
         Enumeration rentals = _rentals.elements();
         String result = "Rental Record for " + getName() + "\n";
         while (rentals.hasMoreElements()) {
@@ -60,4 +62,14 @@ public class Customer {
     public String getName() {
         return _name;
     }
+
+	public double getTotal() {
+		// TODO Auto-generated method stub
+		return totalAmount;
+	}
+
+	public int getFrequentRenterPoints() {
+		// TODO Auto-generated method stub
+		return frequentRenterPoints;
+	}
 }
