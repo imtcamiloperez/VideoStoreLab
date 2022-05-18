@@ -1,15 +1,18 @@
+
+
 import junit.framework.*;
 
 public class VideoStoreTest extends TestCase {
+	private Statement statement;
 	public VideoStoreTest(String name) {
 		super(name);
 	}
 
 	protected void setUp() {
-		statement = new Statement("Fred");
+		statement = new Statement("Customer");
 	}
 
-	public void testSingleNewReleaseStatement() {
+	public void testSingleNewReleaseStatementTotals() {
 		statement.addRental(new Rental(new Movie("The Cell", Movie.NEW_RELEASE), 3));
 		statement.generate();
 		assertEquals(9.0, statement.getTotal());
@@ -17,7 +20,7 @@ public class VideoStoreTest extends TestCase {
 		
 	}
 
-	public void testDualNewReleaseStatement() {
+	public void testDualNewReleaseStatementTotals() {
 		statement.addRental(new Rental(new Movie("The Cell", Movie.NEW_RELEASE), 3));
 		statement.addRental(new Rental(new Movie("The Tigger Movie", Movie.NEW_RELEASE), 3));
 		statement.generate();
@@ -27,24 +30,31 @@ public class VideoStoreTest extends TestCase {
 	}
 
 
-	public void testSingleChildrensStatement() {
+	public void testSingleChildrensStatementTotals() {
 		statement.addRental(new Rental(new Movie("The Tigger Movie", Movie.CHILDRENS), 3));
-		assertEquals(
-				"Rental Record for Fred\n\tThe Tigger Movie\t1.5\nYou owed 1.5"
-				+ "\nYou earned 1 frequent renter points\n",
-				statement.generate());
+		statement.generate();
+		assertEquals(1.5, statement.getTotal());
+		assertEquals(1, statement.getFrequentRenterPoints());
 	}
 
-	public void testMultipleRegularStatement() {
+	public void testMultipleRegularStatementTotals() {
+		statement.addRental(new Rental(new Movie("Plan 9 from Outer Space", Movie.REGULAR), 1));
+		statement.addRental(new Rental(new Movie("8 1/2", Movie.REGULAR), 2));
+		statement.addRental(new Rental(new Movie("Eraserhead", Movie.REGULAR), 3));
+		statement.generate();
+		assertEquals(7.5, statement.getTotal());
+		assertEquals(3, statement.getFrequentRenterPoints());
+
+	}
+
+	public void testMultipleRegularStatementFormat() {
 		statement.addRental(new Rental(new Movie("Plan 9 from Outer Space", Movie.REGULAR), 1));
 		statement.addRental(new Rental(new Movie("8 1/2", Movie.REGULAR), 2));
 		statement.addRental(new Rental(new Movie("Eraserhead", Movie.REGULAR), 3));
 
 		assertEquals(
-				"Rental Record for Fred\n\tPlan 9 from Outer Space\t2.0\n\t8 1/2\t2.0"
-				+ "\n\tEraserhead\t3.5\nYou owed 7.5\nYou earned 3 frequent renter points\n",
+				"Rental Record for Customer\n\tPlan 9 from Outer Space\t2.0\n\t8 1/2\t2.0"
+						+ "\n\tEraserhead\t3.5\nYou owed 7.5\nYou earned 3 frequent renter points\n",
 				statement.generate());
 	}
-
-	private Statement statement;
 }
